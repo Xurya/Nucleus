@@ -11,7 +11,7 @@ async function start(app){
         mountRoutes(app); 
     }catch(exception){
         console.error(exception);
-        //TODO: send error logs elsewhere
+        //TODO: send error logs elsewhere 
     }
 }
 

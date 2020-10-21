@@ -1,3 +1,7 @@
+# Configs
+/backend/config/*
+!/backend/config/template_discord.conf
+
 # NodeJS
 **/node_modules
 

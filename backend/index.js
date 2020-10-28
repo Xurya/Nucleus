@@ -11,7 +11,10 @@ async function start(app){
         mountRoutes(app); 
     }catch(exception){
         console.error(exception);
-        //TODO: send error logs elsewhere 
+
+        const discord = require("./routes/discord.js");
+
+        discord.sendError("FATAL | " + exception);
     }
 }
 

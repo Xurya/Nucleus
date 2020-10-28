@@ -7,11 +7,9 @@ const { Webhook } = require('discord-webhook-node');
 const fs = require('fs');
 const config = ini.parse(fs.readFileSync("./backend/config/discord.conf", 'utf-8'));
 
-const links = config.webhook.links;
-
 var hooks = [];
 
-for(link of links){
+for(link of config.webhook.links){
     hooks.push(new Webhook(link)); 
 }
 
@@ -21,7 +19,23 @@ const send = (payload) => {
     }
 }
 
+var error = [];
+
+for(link of config.debug.error){
+    error.push(new Webhook(link)); 
+}
+
+const sendError = (payload) => {
+    var date = new Date();
+    for(hook of error){
+        hook.send("Error " + date.toLocaleString() + ": " + payload);
+    }
+}
+
+
+
 module.exports = {
     router,
-    send
+    send,
+    sendError
 };

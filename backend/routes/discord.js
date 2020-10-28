@@ -32,7 +32,12 @@ const sendError = (payload) => {
     }
 }
 
-
+//TODO: Add security
+router.post('/send', async (req,res) =>{
+    let payload = req.body;
+    send(payload.message);
+    res.json({status:'success'});
+});
 
 module.exports = {
     router,

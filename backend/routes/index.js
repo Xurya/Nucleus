@@ -6,11 +6,12 @@ const ini = require('ini');
 const fs = require('fs');
 const { Console } = require("console");
 
+var config = ini.parse(fs.readFileSync("./backend/config/discord.conf", 'utf-8'));
+
 const days = ['Sun', 'Mon', 'Tues', 'Weds', 'Thurs', 'Friday', 'Sat'];
 
 //Reminder Script
 async function callback(){
-    var config = ini.parse(fs.readFileSync("./backend/config/discord.conf", 'utf-8'));
     var doc = new GoogleSpreadsheet(config.google.tmSheetID);
     doc.useApiKey(config.google.apiKey);
     await doc.loadInfo().catch(function () {
@@ -33,7 +34,8 @@ async function callback(){
         return;
     }
     //Get Row based on current time segment
-    var row = hrs - 7;
+    var ampm = hrs >= 12 ? 'pm' : 'am';
+    var row = 2*(hrs-7);
     if(mins > 30){
         row+=1;
     }
@@ -45,7 +47,7 @@ async function callback(){
     var next = rows[row+1][col];
 
     if(curr !== next){
-        discord.send(next + " in 15 Minutes!")
+        discord.send(next + " in 15 Minutes! <@" + config.discord.user + ">")
     }
 }
 
@@ -53,7 +55,7 @@ var firstDate = new Date();
 var firstMins = firstDate.getMinutes();
 var wait = 0;
 if(firstMins > 45 ){
-    wait = 60-firstMins;
+    wait = 75-firstMins;
 }
 if(firstMins < 45)
 {
